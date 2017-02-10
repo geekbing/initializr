@@ -193,14 +193,13 @@ public class MainControllerStatsIntegrationTests
 
 		public static class Content {
 
-			public Content(String authorization, String body) {
+			private final String authorization;
+			private final String json;
+
+			Content(String authorization, String body) {
 				this.authorization = authorization;
 				json = body;
 			}
-
-			private String authorization;
-
-			private String json;
 
 		}
 

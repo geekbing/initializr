@@ -52,10 +52,12 @@ public class Type extends DefaultMetadataElement implements Describable {
 		this.description = description;
 	}
 
+	@SuppressWarnings("deprecation")
 	public String getStsId() {
 		return stsId;
 	}
 
+	@SuppressWarnings("deprecation")
 	public void setStsId(String stsId) {
 		this.stsId = stsId;
 	}

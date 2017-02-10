@@ -270,7 +270,6 @@ public class MainControllerIntegrationTests
 		validateContentType(response,
 				AbstractInitializrControllerIntegrationTests.CURRENT_METADATA_MEDIA_TYPE);
 		validateCurrentMetadata(new JSONObject(response.getBody()));
-		;
 	}
 
 	@Test

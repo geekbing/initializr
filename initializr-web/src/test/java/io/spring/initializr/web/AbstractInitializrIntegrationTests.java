@@ -87,7 +87,7 @@ public abstract class AbstractInitializrIntegrationTests {
 
 	protected String htmlHome() {
 		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.TEXT_HTML));
+		headers.setAccept(Collections.singletonList(MediaType.TEXT_HTML));
 		return restTemplate.exchange(createUrl("/"), HttpMethod.GET,
 				new HttpEntity<Void>(headers), String.class).getBody();
 	}
@@ -244,7 +244,7 @@ public abstract class AbstractInitializrIntegrationTests {
 	private enum ArchiveType {
 		ZIP,
 
-		TGZ;
+		TGZ
 	}
 
 	@EnableAutoConfiguration

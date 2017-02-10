@@ -20,11 +20,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.util.StringUtils;
 
 /**
@@ -37,6 +39,7 @@ public class InitializrConfiguration {
 	/**
 	 * Environment options.
 	 */
+	@NestedConfigurationProperty
 	private final Env env = new Env();
 
 	public Env getEnv() {
@@ -106,20 +109,18 @@ public class InitializrConfiguration {
 
 	private static String unsplitWords(String text) {
 		return String
-				.join("", Arrays
-						.asList(text
-								.split("(_|-| |:)+"))
-						.stream().map(it -> StringUtils.capitalize(it))
+				.join("", Arrays.stream(text
+						.split("(_|-| |:)+")).map(StringUtils::capitalize)
 						.collect(Collectors.toList()).toArray(new String[0]));
 	}
 
 	private static String splitCamelCase(String text) {
 		return String
-				.join("", Arrays
-						.asList(text
-								.split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])"))
-						.stream().map(it -> StringUtils.capitalize(it.toLowerCase()))
-						.collect(Collectors.toList()).toArray(new String[0]));
+				.join("", Arrays.stream(text
+						.split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])"))
+						.map(it -> StringUtils.capitalize(it.toLowerCase()))
+						.collect(Collectors.toList())
+						.toArray(new String[0]));
 	}
 
 	private static boolean hasInvalidChar(String text) {
@@ -174,7 +175,7 @@ public class InitializrConfiguration {
 		 * default package name should be used instead.
 		 */
 		private List<String> invalidPackageNames = new ArrayList<>(
-				Arrays.asList("org.springframework"));
+				Collections.singletonList("org.springframework"));
 
 		/**
 		 * Force SSL support. When enabled, any access using http generate https links.
@@ -196,16 +197,19 @@ public class InitializrConfiguration {
 		/**
 		 * Gradle-specific settings.
 		 */
+		@NestedConfigurationProperty
 		private final Gradle gradle = new Gradle();
 
 		/**
 		 * Kotlin-specific settings.
 		 */
+		@NestedConfigurationProperty
 		private final Kotlin kotlin = new Kotlin();
 
 		/**
 		 * Maven-specific settings.
 		 */
+		@NestedConfigurationProperty
 		private final Maven maven = new Maven();
 
 		public String getSpringBootMetadataUrl() {
@@ -316,16 +320,8 @@ public class InitializrConfiguration {
 			gradle.merge(other.gradle);
 			kotlin.version = other.kotlin.version;
 			maven.merge(other.maven);
-			other.boms.forEach((id, bom) -> {
-				if (boms.get(id) == null) {
-					boms.put(id, bom);
-				}
-			});
-			other.repositories.forEach((id, repo) -> {
-				if (repositories.get(id) == null) {
-					repositories.put(id, repo);
-				}
-			});
+			other.boms.forEach(boms::putIfAbsent);
+			other.repositories.forEach(repositories::putIfAbsent);
 		}
 
 		public static class Gradle {

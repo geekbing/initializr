@@ -37,6 +37,8 @@ import io.spring.initializr.web.support.DefaultDependencyMetadataProvider;
 import io.spring.initializr.web.support.DefaultInitializrMetadataProvider;
 import io.spring.initializr.web.ui.UiController;
 
+import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.bind.RelaxedPropertyResolver;
@@ -69,8 +71,13 @@ import org.springframework.web.servlet.resource.ResourceUrlProvider;
 @EnableConfigurationProperties(InitializrProperties.class)
 public class InitializrAutoConfiguration {
 
-	@Autowired(required = false)
-	private List<ProjectRequestPostProcessor> postProcessors = new ArrayList<>();
+	private final List<ProjectRequestPostProcessor> postProcessors;
+
+	public InitializrAutoConfiguration(
+			ObjectProvider<List<ProjectRequestPostProcessor>> postProcessors) {
+		List<ProjectRequestPostProcessor> list = postProcessors.getIfAvailable();
+		this.postProcessors = list != null ? list : new ArrayList<>();
+	}
 
 	@Bean
 	public WebConfig webConfig() {

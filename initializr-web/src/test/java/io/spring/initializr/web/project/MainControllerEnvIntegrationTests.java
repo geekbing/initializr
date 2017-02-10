@@ -55,7 +55,7 @@ public class MainControllerEnvIntegrationTests extends AbstractInitializrControl
 	@Test
 	public void generateProjectWithInvalidName() {
 		downloadZip("/starter.zip?style=data-jpa&name=Invalid")
-				.isJavaProject((String) ProjectAssert.DEFAULT_PACKAGE_NAME, "FooBarApplication")
+				.isJavaProject(ProjectAssert.DEFAULT_PACKAGE_NAME, "FooBarApplication")
 				.isMavenProject()
 				.hasStaticAndTemplatesResources(false).pomAssert()
 				.hasDependenciesCount(2)

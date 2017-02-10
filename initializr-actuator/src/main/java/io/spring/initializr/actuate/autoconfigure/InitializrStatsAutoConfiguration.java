@@ -44,8 +44,11 @@ import org.springframework.retry.support.RetryTemplate;
 @ConditionalOnProperty("initializr.stats.elastic.uri")
 class InitializrStatsAutoConfiguration {
 
-	@Autowired
-	private StatsProperties statsProperties;
+	private final StatsProperties statsProperties;
+
+	public InitializrStatsAutoConfiguration(StatsProperties statsProperties) {
+		this.statsProperties = statsProperties;
+	}
 
 	@Bean
 	public ProjectGenerationStatPublisher projectRequestStatHandler(

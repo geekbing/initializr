@@ -295,9 +295,8 @@ public class MainController extends AbstractInitializrController {
 
 	private static String getWrapperScript(ProjectRequest request) {
 		String script = "gradle".equals(request.getBuild()) ? "gradlew" : "mvnw";
-		String wrapperScript = request.getBaseDir() != null
+		return request.getBaseDir() != null
 				? request.getBaseDir() + "/" + script : script;
-		return wrapperScript;
 	}
 
 	private ResponseEntity<byte[]> upload(File download, File dir, String fileName,

@@ -72,7 +72,7 @@ public abstract class AbstractInitializrController {
 	/**
 	 * Render the home page with the specified template.
 	 */
-	protected void renderHome(Map<String, Object> model) throws Exception {
+	protected void renderHome(Map<String, Object> model) {
 		InitializrMetadata metadata = metadataProvider.get();
 
 		model.put("serviceUrl", generateAppUrl());

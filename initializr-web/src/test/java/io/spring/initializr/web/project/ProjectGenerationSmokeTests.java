@@ -49,13 +49,14 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * @author Dave Syer
+ * @author Stephane Nicoll
  */
 @ActiveProfiles("test-default")
-public class NewGenerationSmokeTests extends AbstractFullStackInitializrIntegrationTests {
+public class ProjectGenerationSmokeTests
+		extends AbstractFullStackInitializrIntegrationTests {
 
 	private File downloadDir;
 	private WebDriver driver;
-	private Actions actions;
 
 	private Action enterAction;
 
@@ -73,7 +74,7 @@ public class NewGenerationSmokeTests extends AbstractFullStackInitializrIntegrat
 				"application/zip,application/x-compress,application/octet-stream");
 
 		driver = new FirefoxDriver(fxProfile);
-		actions = new Actions(driver);
+		Actions actions = new Actions(driver);
 
 		enterAction = actions.sendKeys(Keys.ENTER).build();
 	}
@@ -314,7 +315,7 @@ public class NewGenerationSmokeTests extends AbstractFullStackInitializrIntegrat
 		ProjectAssert projectAssert = zipProjectAssert(from("demo.zip"));
 		projectAssert.hasBaseDir("demo").isMavenProject()
 				.isGroovyProject("com.example.acme",
-						(String) ProjectAssert.DEFAULT_APPLICATION_NAME)
+						ProjectAssert.DEFAULT_APPLICATION_NAME)
 				.hasStaticAndTemplatesResources(false).pomAssert().hasDependenciesCount(3)
 				.hasSpringBootStarterRootDependency().hasSpringBootStarterTest()
 				.hasDependency("org.codehaus.groovy", "groovy");
@@ -352,8 +353,7 @@ public class NewGenerationSmokeTests extends AbstractFullStackInitializrIntegrat
 
 	private HomePage toHome(String path) {
 		driver.get("http://localhost:" + port + path);
-		HomePage page = new HomePage(driver);
-		return page;
+		return new HomePage(driver);
 	}
 
 	private ProjectAssert assertSimpleProject() throws Exception {
@@ -382,7 +382,7 @@ class HomePage {
 
 	@FindBy(id = "form")
 	private WebElement form;
-	private WebDriver driver;
+	private final WebDriver driver;
 
 	public HomePage(WebDriver driver) {
 		this.driver = driver;

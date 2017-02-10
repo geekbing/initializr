@@ -23,16 +23,19 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import io.spring.initializr.InitializrException;
+import io.spring.initializr.metadata.BillOfMaterials;
 import io.spring.initializr.metadata.Dependency;
 import io.spring.initializr.metadata.InitializrConfiguration.Env.Maven.ParentPom;
 import io.spring.initializr.metadata.InitializrMetadata;
 import io.spring.initializr.metadata.InitializrMetadataProvider;
+import io.spring.initializr.metadata.MetadataElement;
 import io.spring.initializr.util.TemplateRenderer;
 import io.spring.initializr.util.Version;
 import org.slf4j.Logger;
@@ -312,7 +315,7 @@ public class ProjectGenerator {
 	/**
 	 * Resolve the specified {@link ProjectRequest} and return the model to use to
 	 * generate the project
-	 * @param request the request to handle
+	 * @param originalRequest the request to handle
 	 * @return a model for that request
 	 */
 	protected Map<String, Object> resolveModel(ProjectRequest originalRequest) {
@@ -355,7 +358,7 @@ public class ProjectGenerator {
 		}
 		model.put("resolvedBoms",
 				request.getBoms().values().stream()
-						.sorted((a, b) -> a.getOrder().compareTo(b.getOrder()))
+						.sorted(Comparator.comparing(BillOfMaterials::getOrder))
 						.collect(Collectors.toList()));
 		model.put("reversedBoms",
 				request.getBoms().values().stream()
@@ -375,10 +378,8 @@ public class ProjectGenerator {
 
 		request.getBoms().forEach((k, v) -> {
 			if (v.getVersionProperty() != null) {
-				request.getBuildProperties().getVersions()
-						.computeIfAbsent(v.getVersionProperty(), key -> {
-							return () -> v.getVersion();
-						});
+				request.getBuildProperties().getVersions().computeIfAbsent(
+						v.getVersionProperty(), key -> v::getVersion);
 			}
 		});
 
@@ -603,7 +604,7 @@ public class ProjectGenerator {
 	private static List<Dependency> filterDependencies(List<Dependency> dependencies,
 			String scope) {
 		return dependencies.stream().filter(dep -> scope.equals(dep.getScope()))
-				.sorted((a, b) -> a.getId().compareTo(b.getId()))
+				.sorted(Comparator.comparing(MetadataElement::getId))
 				.collect(Collectors.toList());
 	}
 

@@ -76,7 +76,7 @@ public class DependenciesCapability extends ServiceCapability<List<DependencyGro
 	@Override
 	public void merge(List<DependencyGroup> otherContent) {
 		otherContent.forEach(group -> {
-			if (!content.stream().anyMatch(it -> group.getName() != null
+			if (content.stream().noneMatch(it -> group.getName() != null
 					&& group.getName().equals(it.getName()))) {
 				content.add(group);
 			}

@@ -17,6 +17,7 @@
 package io.spring.initializr.web.project;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import io.spring.initializr.metadata.InitializrMetadataProvider;
 import io.spring.initializr.web.AbstractInitializrControllerIntegrationTests;
@@ -55,7 +56,7 @@ public class LegacyStsControllerIntegrationTests
 
 	protected String htmlHome() {
 		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.TEXT_HTML));
+		headers.setAccept(Collections.singletonList(MediaType.TEXT_HTML));
 		return getRestTemplate().exchange(createUrl("/sts"), HttpMethod.GET,
 				new HttpEntity<Void>(headers), String.class).getBody();
 	}

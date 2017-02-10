@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class TypeCapability extends ServiceCapability<List<Type>> implements Defaultable<Type> {
 
-	final List<Type> content = new ArrayList<>();
+	private final List<Type> content = new ArrayList<>();
 
 	public TypeCapability() {
 		super("type", ServiceCapabilityType.ACTION, "Type", "project type");
@@ -50,7 +50,8 @@ public class TypeCapability extends ServiceCapability<List<Type>> implements Def
 	 * Return the default {@link Type}.
 	 */
 	public Type getDefault() {
-		return content.stream().filter(it -> it.isDefault()).findFirst().orElse(null);
+		return content.stream().filter(DefaultMetadataElement::isDefault)
+				.findFirst().orElse(null);
 	}
 
 	@Override
