@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>io.spring.initializr</groupId>
 		<artifactId>initializr</artifactId>
-		<version>0.4.0.BUILD-SNAPSHOT</version>
+		<version>0.5.0.BUILD-SNAPSHOT</version>
 	</parent>
 	<artifactId>initializr-web</artifactId>
 	<name>Spring Initializr :: Web</name>
@@ -17,12 +17,13 @@
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-autoconfigure</artifactId>
+			<artifactId>spring-boot-starter-mustache</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context-support</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-cache</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
@@ -32,22 +33,18 @@
 			<artifactId>spring-hateoas</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.github.ben-manes.caffeine</groupId>
-			<artifactId>caffeine</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.codehaus.groovy</groupId>
-			<artifactId>groovy</artifactId>
-			<scope>provided</scope>
+			<groupId>org.apache.ant</groupId>
+			<artifactId>ant</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.codehaus.groovy</groupId>
-			<artifactId>groovy-ant</artifactId>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
 		</dependency>
+		
 		<dependency>
-			<groupId>org.codehaus.groovy</groupId>
-			<artifactId>groovy-json</artifactId>
+			<groupId>javax.cache</groupId>
+			<artifactId>cache-api</artifactId>
+			<optional>true</optional>
 		</dependency>
 
 		<dependency>
@@ -93,11 +90,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.gebish</groupId>
-			<artifactId>geb-core</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-firefox-driver</artifactId>
 			<scope>test</scope>
@@ -125,7 +117,8 @@
 						<configuration>
 							<attach>true</attach>
 							<descriptors>
-								<descriptor>${basedir}/src/assembly/snippets.xml</descriptor>
+								<descriptor>${basedir}/src/assembly/snippets.xml
+								</descriptor>
 								<descriptor>${basedir}/src/assembly/stub.xml</descriptor>
 							</descriptors>
 						</configuration>
@@ -142,10 +135,6 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.gmavenplus</groupId>
-				<artifactId>gmavenplus-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
